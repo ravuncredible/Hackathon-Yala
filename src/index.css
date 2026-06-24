@@ -1,0 +1,26 @@
+@import 'leaflet/dist/leaflet.css';
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300;
+  }
+}
+
+/* Custom minimal scrollbar */
+.styled-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}
+html.dark .styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #475569;
+}

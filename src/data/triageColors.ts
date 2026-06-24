@@ -1,0 +1,51 @@
+// Shared triage color configuration used across CommandCenter, HospitalMock, and TriageEMS
+
+export const TRIAGE_COLORS = {
+  Red: {
+    emoji: '🔴',
+    label: 'วิกฤต',
+    labelEn: 'Critical',
+    bg: 'bg-red-500/15',
+    bgSolid: 'bg-red-600',
+    bgHover: 'hover:bg-red-700',
+    bgLight: 'bg-red-500/10',
+    border: 'border-red-500',
+    borderLight: 'border-red-500/40',
+    text: 'text-red-400',
+    ring: 'ring-red-500',
+    glow: 'shadow-red-500/30',
+    badge: 'bg-red-600',
+  },
+  Yellow: {
+    emoji: '🟡',
+    label: 'เร่งด่วน',
+    labelEn: 'Urgent',
+    bg: 'bg-yellow-500/15',
+    bgSolid: 'bg-yellow-600',
+    bgHover: 'hover:bg-yellow-700',
+    bgLight: 'bg-yellow-500/10',
+    border: 'border-yellow-500',
+    borderLight: 'border-yellow-500/40',
+    text: 'text-yellow-400',
+    ring: 'ring-yellow-500',
+    glow: 'shadow-yellow-500/30',
+    badge: 'bg-yellow-600',
+  },
+  Green: {
+    emoji: '🟢',
+    label: 'เล็กน้อย',
+    labelEn: 'Minor',
+    bg: 'bg-green-500/15',
+    bgSolid: 'bg-green-600',
+    bgHover: 'hover:bg-green-700',
+    bgLight: 'bg-green-500/10',
+    border: 'border-green-500',
+    borderLight: 'border-green-500/40',
+    text: 'text-green-400',
+    ring: 'ring-green-500',
+    glow: 'shadow-green-500/30',
+    badge: 'bg-green-600',
+  },
+} as const;
+
+export type TriageColorKey = keyof typeof TRIAGE_COLORS;

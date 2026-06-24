@@ -1,0 +1,22 @@
+/* Leaflet Map Customizations */
+.leaflet-container {
+  background: #0f172a;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+  border: 1px solid #334155;
+}
+
+.custom-popup .leaflet-popup-tip {
+  background: #1e293b;
+}
+
+/* Pulse animation for map markers */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
