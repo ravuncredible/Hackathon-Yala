@@ -99,15 +99,16 @@ export default function HospitalMock() {
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-100 to-slate-200 dark:from-slate-900 dark:via-slate-950 dark:to-black text-slate-900 dark:text-slate-100 p-4 md:p-8 transition-colors">
       <div className="max-w-6xl mx-auto space-y-6">
-        <div className="flex justify-between items-center bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl p-4 rounded-2xl border border-white/40 dark:border-slate-700/50 shadow-lg">
-          <Link to="/" className="flex items-center text-blue-600 dark:text-blue-400 font-bold hover:text-blue-800 dark:hover:text-blue-300 bg-white/80 dark:bg-slate-800/80 px-4 py-2 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900/30 hover:shadow-md transition-all">
+        <div className="flex justify-between items-center pointer-events-none">
+          <Link to="/" className="pointer-events-auto flex items-center text-slate-600 dark:text-slate-300 font-bold hover:text-blue-600 dark:hover:text-blue-400 bg-white/60 hover:bg-white/90 dark:bg-slate-900/60 dark:hover:bg-slate-800/90 backdrop-blur-xl px-5 py-3 rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/50 hover:shadow-xl transition-all">
             <ArrowLeft className="w-5 h-5 mr-2" /> กลับหน้าหลัก
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="pointer-events-auto flex items-center gap-5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl px-6 py-3 rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/50">
             <div className="text-right hidden md:block">
               <h2 className="text-sm font-black text-slate-800 dark:text-white leading-tight">ER DASHBOARD</h2>
-              <p className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Emergency Room Active Monitor</p>
+              <p className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Active Monitor</p>
             </div>
+            <div className="w-px h-8 bg-slate-300/50 dark:bg-slate-700/50 hidden md:block"></div>
             <ThemeToggle />
           </div>
         </div>
