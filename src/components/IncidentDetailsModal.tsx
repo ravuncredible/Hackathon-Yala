@@ -7,21 +7,21 @@ import {
 type Incident = {
   id: string;
   name: string;
-  type: string;
-  location_text: string;
-  lat: number;
-  lng: number;
-  patient_age: number;
-  patient_gender: string;
-  patient_condition: string;
-  caller_name: string;
-  caller_phone: string;
-  is_caller_with_patient: boolean;
-  triage_level: string;
-  assigned_unit_id: string;
-  estimated_casualties: number;
-  triage_checklist: string;
-  status: string;
+  type?: string;
+  location_text?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+  patient_age?: number | null;
+  patient_gender?: string | null;
+  patient_condition?: string | null;
+  caller_name?: string | null;
+  caller_phone?: string | null;
+  is_caller_with_patient?: boolean | null;
+  triage_level?: string | null;
+  assigned_unit_id?: string | null;
+  estimated_casualties?: number | null;
+  triage_checklist?: string | null;
+  status?: string | null;
   created_at: string;
 };
 
@@ -41,7 +41,7 @@ const TRIAGE_COLORS: Record<string, { bg: string, text: string, border: string, 
 };
 
 export default function IncidentDetailsModal({ incident, unitName, onClose }: IncidentDetailsModalProps) {
-  const colorConfig = TRIAGE_COLORS[incident.triage_level] || TRIAGE_COLORS['Green'];
+  const colorConfig = TRIAGE_COLORS[incident.triage_level || 'Green'] || TRIAGE_COLORS['Green'];
   const timeString = new Date(incident.created_at).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
   const dateString = new Date(incident.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
 

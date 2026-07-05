@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import {
   ShieldAlert, ArrowLeft, Activity, Droplet, Clock, Truck,
-  MapPin, Loader2, PhoneCall, ChevronUp, ChevronDown, CheckCircle, XCircle
+  MapPin, Loader2, PhoneCall, ChevronUp, ChevronDown, CheckCircle, XCircle, FileText
 } from 'lucide-react';
 import { MOCK_HOSPITALS, type Hospital } from '../data/hospitals';
 import { TRIAGE_COLORS, type TriageColorKey } from '../data/triageColors';
@@ -27,16 +27,21 @@ type RescueUnit = {
 type Incident = {
   id: string;
   name: string;
+  type?: string;
   patient_age: number | null;
   patient_gender: string | null;
   patient_condition: string | null;
   caller_name: string | null;
   caller_phone: string | null;
+  is_caller_with_patient?: boolean;
   triage_level: string | null;
   location_text: string | null;
   triage_checklist?: string | null;
   lat: number | null;
   lng: number | null;
+  assigned_unit_id?: string;
+  estimated_casualties?: number;
+  status?: string;
   created_at: string;
 };
 
