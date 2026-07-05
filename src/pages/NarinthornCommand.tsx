@@ -264,15 +264,25 @@ export default function NarinthornCommand() {
     ].filter(Boolean);
     const checklistStr = checklistItems.length > 0 ? checklistItems.join(', ') : null;
 
+    const mapIncidentType = (typeText: string) => {
+      switch (typeText) {
+        case 'อุบัติเหตุหมู่ (MCI)': return 'accident';
+        case 'ระเบิด (Bombing)': return 'explosion';
+        case 'น้ำท่วม (Flood)': return 'flood';
+        case 'ไฟไหม้ (Fire)': return 'fire';
+        default: return 'other';
+      }
+    };
+
     const payload = {
       name: `[${finalIncidentType}] แจ้งเหตุ: ${symptoms || 'ไม่ระบุอาการ'}${isEmsType ? vsString : ''}`,
-      type: isDisasterMode ? 'mass_casualty' : 'other',
+      type: mapIncidentType(finalIncidentType),
       location_text: locationText,
       lat: incidentCoords?.lat || null,
       lng: incidentCoords?.lng || null,
-      patient_age: (patientAge && !isDisasterMode) ? parseInt(patientAge) : null,
-      patient_gender: !isDisasterMode ? patientGender : null,
-      patient_condition: !isDisasterMode ? patientCondition : null,
+      patient_age: patientAge ? parseInt(patientAge) : null,
+      patient_gender: patientGender,
+      patient_condition: patientCondition,
       caller_name: callerName,
       caller_phone: callerPhone,
       is_caller_with_patient: isCallerWithPatient,
@@ -462,10 +472,9 @@ export default function NarinthornCommand() {
               )}
             </section>
 
-            {/* Patient Info (HIDDEN IF MCI) */}
-            {!isDisasterMode && (
-              <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700">
-                <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5"><Users className="w-4 h-4"/> ข้อมูลผู้ป่วย</h3>
+            {/* Patient Info */}
+            <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5"><Users className="w-4 h-4"/> ข้อมูลผู้ป่วย</h3>
               <div className="grid grid-cols-4 gap-4">
                 <div className="col-span-1">
                   <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">อายุ</label>
@@ -498,10 +507,8 @@ export default function NarinthornCommand() {
                 </div>
               </div>
             </section>
-            )}
 
-            {/* Vital Signs (HIDDEN IF MCI) */}
-            {!isDisasterMode && (
+            {/* Vital Signs */}
             <details className="group space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700 bg-blue-50/50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-900/30">
               <summary className="text-sm font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest flex items-center justify-between cursor-pointer list-none select-none">
                 <div className="flex items-center gap-1.5"><Activity className="w-4 h-4"/> สัญญาณชีพ (Vital Signs) & การประสานงาน <span className="text-[10px] bg-blue-200 text-blue-700 px-1.5 py-0.5 rounded ml-2">Optional</span></div>
@@ -574,7 +581,6 @@ export default function NarinthornCommand() {
                 </div>
               </div>
             </details>
-            )}
 
             {/* Location */}
             <section className="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-700">
