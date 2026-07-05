@@ -384,7 +384,7 @@ export default function RescueDashboard() {
                 </div>
               ) : (
                 assignedIncidents.map(inc => {
-                  const colorConfig = TRIAGE_COLORS[(inc.triage_level as TriageColorKey) || 'Green'];
+                  const colorConfig = TRIAGE_COLORS[(inc.triage_level as TriageColorKey)] || TRIAGE_COLORS['Green'];
                   const timeString = new Date(inc.created_at).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
                   
                   return (

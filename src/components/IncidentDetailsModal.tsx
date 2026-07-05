@@ -31,17 +31,10 @@ interface IncidentDetailsModalProps {
   onClose: () => void;
 }
 
-const TRIAGE_COLORS: Record<string, { bg: string, text: string, border: string, label: string }> = {
-  'Red 1': { bg: 'bg-red-500', text: 'text-white', border: 'border-red-500', label: 'วิกฤต (Red 1)' },
-  'Red 2': { bg: 'bg-red-500', text: 'text-white', border: 'border-red-500', label: 'วิกฤต (Red 2)' },
-  'Yellow': { bg: 'bg-yellow-400', text: 'text-yellow-900', border: 'border-yellow-400', label: 'เร่งด่วน (Yellow)' },
-  'Green': { bg: 'bg-green-500', text: 'text-white', border: 'border-green-500', label: 'ไม่รุนแรง (Green)' },
-  'White': { bg: 'bg-slate-200', text: 'text-slate-800', border: 'border-slate-300', label: 'ทั่วไป (White)' },
-  'Black': { bg: 'bg-slate-800', text: 'text-white', border: 'border-slate-800', label: 'เสียชีวิต (Black)' },
-};
+import { TRIAGE_COLORS, type TriageColorKey } from '../data/triageColors';
 
 export default function IncidentDetailsModal({ incident, unitName, onClose }: IncidentDetailsModalProps) {
-  const colorConfig = TRIAGE_COLORS[incident.triage_level || 'Green'] || TRIAGE_COLORS['Green'];
+  const colorConfig = TRIAGE_COLORS[(incident.triage_level as TriageColorKey)] || TRIAGE_COLORS['Green'];
   const timeString = new Date(incident.created_at).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
   const dateString = new Date(incident.created_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -57,7 +50,7 @@ export default function IncidentDetailsModal({ incident, unitName, onClose }: In
       <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col relative z-10 animate-in fade-in zoom-in duration-200">
         
         {/* Header */}
-        <div className={`p-5 flex justify-between items-start border-b ${colorConfig.bg} ${colorConfig.text}`}>
+        <div className={`p-5 flex justify-between items-start border-b ${colorConfig.bgSolid} text-white`}>
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-black bg-white/20 px-2 py-0.5 rounded shadow-sm">
@@ -84,9 +77,9 @@ export default function IncidentDetailsModal({ incident, unitName, onClose }: In
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
               <div className="text-xs font-bold text-slate-500 uppercase flex items-center gap-1.5 mb-1"><Activity className="w-4 h-4"/> ระดับความรุนแรง</div>
-              <div className={`text-base font-black flex items-center gap-2 ${colorConfig.text === 'text-white' ? colorConfig.bg.replace('bg-', 'text-') : colorConfig.text}`}>
-                <div className={`w-3 h-3 rounded-full ${colorConfig.bg}`}></div>
-                {colorConfig.label}
+              <div className={`text-base font-black flex items-center gap-2 ${colorConfig.bgSolid.replace('bg-', 'text-')}`}>
+                <div className={`w-3 h-3 rounded-full ${colorConfig.bgSolid}`}></div>
+                {colorConfig.emoji} {colorConfig.label}
               </div>
             </div>
             <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
