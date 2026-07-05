@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-04T15:37:00Z",
+  "title": "Design System: Hospital Capacity Map Yala",
+  "extensions": {
+    "colorMeta": {
+      "primary-alert": { "role": "primary", "displayName": "Command Red", "canonical": "#ef4444", "tonalRamp": ["#7f1d1d", "#991b1b", "#b91c1c", "#dc2626", "#ef4444", "#f87171", "#fca5a5", "#fecaca"] },
+      "primary-rescue": { "role": "secondary", "displayName": "Rescue Cyan", "canonical": "#06b6d4", "tonalRamp": ["#164e63", "#155e75", "#0e7490", "#0891b2", "#06b6d4", "#22d3ee", "#67e8f9", "#a5f3fc"] }
+    }
+  },
+  "components": [
+    {
+      "name": "Command Action Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary action button used in Narinthorn Command.",
+      "html": "<button class=\"ds-btn-primary\">จบงาน (Complete)</button>",
+      "css": ".ds-btn-primary { background: #ef4444; color: #ffffff; padding: 12px 24px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; transition: transform 0.1s ease, background 0.2s ease; } .ds-btn-primary:active { transform: scale(0.95); } .ds-btn-primary:hover { background: #dc2626; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lifeline Terminal",
+    "overview": "This system serves as a digital lifeline. It must be decisive, fast, and dense with critical information while remaining scannable. The aesthetic philosophy prioritizes high-contrast urgency and layered structural depth over decorative flair. It explicitly rejects cluttered, outdated government interfaces, tiny interactive targets, and generic low-contrast SaaS themes.",
+    "keyCharacteristics": [
+      "Information density balanced by aggressive contrast and clear hierarchy.",
+      "Large, confident touch targets optimized for field work and mobile devices.",
+      "Layered elevation strategy to bring actionable data forward.",
+      "Unapologetically bold color usage reserved strictly for states and alerts."
+    ],
+    "rules": [
+      { "name": "The Color is Data Rule", "body": "Bold colors (Red, Cyan, Amber, Emerald) are reserved strictly for status, triage levels, and primary actions. Do not use them decoratively.", "section": "colors" },
+      { "name": "The Legibility Floor Rule", "body": "Body text must never drop below slate-600 on light backgrounds. Contrast ratios must meet or exceed WCAG AA (4.5:1).", "section": "typography" },
+      { "name": "The Map Stratosphere Rule", "body": "The map is the absolute ground layer (z-0). Everything that floats above it (markers, tooltips, panels) must cast a distinct shadow to communicate its priority over the geographic data.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use large, confident touch targets (minimum 44x44px) for all interactive elements.",
+      "Do map colors directly to physical triage realities (Red = Critical/CPR, Yellow = Urgent, Green = Non-urgent).",
+      "Do use slate-900 for primary data points to ensure they are the highest contrast elements on the page."
+    ],
+    "donts": [
+      "Don't use decorative glassmorphism or excessive background blurs on primary data surfaces.",
+      "Don't use tiny uppercase tracked eyebrows (01 / ABOUT) above sections. This is a command center, not a marketing page.",
+      "Don't design buttons or inputs that are small or hard to tap. (Matches anti-reference: \"No tiny, hard-to-click buttons\").",
+      "Don't use generic government-style layouts with dense, unstructured text blocks. (Matches anti-reference: \"No outdated government UI patterns\").",
+      "Don't use border-left or border-right greater than 1px as a colored accent on cards."
+    ]
+  }
+}
