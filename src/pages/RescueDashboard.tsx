@@ -10,6 +10,7 @@ import {
 import { MOCK_HOSPITALS, type Hospital } from '../data/hospitals';
 import { TRIAGE_COLORS, type TriageColorKey } from '../data/triageColors';
 import ThemeToggle from '../components/ThemeToggle';
+import IncidentDetailsModal from '../components/IncidentDetailsModal';
 
 // --- Types ---
 type RescueUnit = {
@@ -157,6 +158,8 @@ export default function RescueDashboard() {
   // Resizable Sidebar State
   const [sidebarWidth, setSidebarWidth] = useState(450);
   const [isDragging, setIsDragging] = useState(false);
+  
+  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
 
   // Confirm Modal State
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -430,18 +433,24 @@ export default function RescueDashboard() {
                       )}
 
                       {/* Actions */}
-                      <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+                      <div className="flex gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <button 
+                          onClick={() => setSelectedIncident(inc)}
+                          className="flex-1 py-3 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-400 dark:hover:bg-indigo-900/50 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95"
+                        >
+                          <FileText className="w-5 h-5"/> รายละเอียด
+                        </button>
                         <button 
                           onClick={() => openConfirm('จบงาน', 'ยืนยันว่าจบงาน (ผู้ป่วยถึงโรงพยาบาลแล้ว) ใช่หรือไม่?', 'ยืนยันจบงาน', 'success', () => handleUpdateIncidentStatus(inc.id, 'resolved'))}
-                          className="py-3 bg-gradient-to-r from-green-500 to-green-400 text-white hover:from-green-600 hover:to-green-500 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-green-500/40 hover:-translate-y-1 active:scale-95"
+                          className="flex-1 py-3 bg-gradient-to-r from-green-500 to-green-400 text-white hover:from-green-600 hover:to-green-500 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-green-500/40 hover:-translate-y-1 active:scale-95"
                         >
                           <CheckCircle className="w-5 h-5" /> จบงาน
                         </button>
                         <button 
                           onClick={() => openConfirm('ยกเลิกงาน', 'ต้องการยกเลิกเหตุการณ์นี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้', 'ยืนยันยกเลิก', 'danger', () => handleUpdateIncidentStatus(inc.id, 'cancelled'))}
-                          className="py-3 bg-white text-slate-500 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 ring-1 ring-inset ring-slate-200 dark:ring-slate-600 shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95"
+                          className="py-3 px-4 bg-white text-slate-500 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 ring-1 ring-inset ring-slate-200 dark:ring-slate-600 shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95"
                         >
-                          <XCircle className="w-5 h-5"/> ยกเลิก
+                          <XCircle className="w-5 h-5"/>
                         </button>
                       </div>
                     </div>
@@ -628,6 +637,15 @@ export default function RescueDashboard() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Incident Details Modal */}
+      {selectedIncident && (
+        <IncidentDetailsModal 
+          incident={selectedIncident} 
+          unitName={rescueUnits.find(u => u.id === selectedIncident.assigned_unit_id)?.name}
+          onClose={() => setSelectedIncident(null)} 
+        />
       )}
 
       <style>{`html.dark .map-tiles { filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7); }`}</style>

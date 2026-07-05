@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { ArrowLeft, Search, Filter, Calendar, Phone, Activity, Car, FileText, Download, Loader2 } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
+import IncidentDetailsModal from '../components/IncidentDetailsModal';
 
 type Incident = {
   id: string;
@@ -30,6 +31,8 @@ export default function IncidentHistory() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [units, setUnits] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+
+  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -197,6 +200,7 @@ export default function IncidentHistory() {
                   <th className="p-4 text-xs font-bold text-slate-500 uppercase">ระดับความรุนแรง</th>
                   <th className="p-4 text-xs font-bold text-slate-500 uppercase">หน่วยที่รับผิดชอบ</th>
                   <th className="p-4 text-xs font-bold text-slate-500 uppercase">สถานะ</th>
+                  <th className="p-4 text-xs font-bold text-slate-500 uppercase text-center">จัดการ</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
@@ -254,6 +258,15 @@ export default function IncidentHistory() {
                       <td className="p-4 align-top">
                         {getStatusBadge(inc.status)}
                       </td>
+                      <td className="p-4 align-top text-center">
+                        <button 
+                          onClick={() => setSelectedIncident(inc)}
+                          className="p-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 rounded-lg transition-colors group relative inline-flex items-center justify-center"
+                          title="ดูรายละเอียด"
+                        >
+                          <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -273,6 +286,16 @@ export default function IncidentHistory() {
         </div>
 
       </main>
+
+      {/* Incident Details Modal */}
+      {selectedIncident && (
+        <IncidentDetailsModal 
+          incident={selectedIncident} 
+          unitName={units[selectedIncident.assigned_unit_id]}
+          onClose={() => setSelectedIncident(null)} 
+        />
+      )}
+
     </div>
   );
 }
