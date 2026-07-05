@@ -348,18 +348,18 @@ export default function NarinthornCommand() {
       <div className="z-[1000] p-2 md:p-4 pointer-events-none">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center max-w-[1920px] mx-auto gap-3">
           
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <Link to="/" className="pointer-events-auto flex items-center text-slate-600 dark:text-slate-300 font-bold hover:text-rose-600 dark:hover:text-rose-400 bg-white/80 hover:bg-white/95 dark:bg-slate-900/80 dark:hover:bg-slate-800/95 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/50 hover:shadow-xl transition-all">
-              <ArrowLeft className="w-5 h-5 md:mr-2" /> <span className="hidden md:inline">กลับ</span>
+          <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto">
+            <Link to="/" className="pointer-events-auto flex items-center text-slate-600 dark:text-slate-300 font-bold hover:text-rose-600 dark:hover:text-rose-400 bg-white/80 hover:bg-white/95 dark:bg-slate-900/80 dark:hover:bg-slate-800/95 backdrop-blur-xl px-3 py-2 rounded-xl shadow-sm border border-white/40 dark:border-slate-700/50 hover:shadow-md transition-all text-sm">
+              <ArrowLeft className="w-4 h-4 md:mr-1.5" /> <span className="hidden md:inline">กลับ</span>
             </Link>
             
-            <div className="pointer-events-auto flex items-center gap-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-4 md:px-5 py-2.5 rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/50 flex-1 md:flex-initial">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-red-500 via-rose-500 to-orange-500 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/30 flex-shrink-0">
-                <PhoneCall className="w-5 h-5 md:w-6 md:h-6 text-white" />
+            <div className="pointer-events-auto flex items-center gap-2.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-3 md:px-4 py-2 rounded-xl shadow-sm border border-white/40 dark:border-slate-700/50 flex-1 md:flex-initial">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-red-500 via-rose-500 to-orange-500 rounded-lg md:rounded-xl flex items-center justify-center shadow-md shadow-red-500/20 flex-shrink-0">
+                <PhoneCall className="w-4 h-4 md:w-5 md:h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-base md:text-2xl font-black bg-gradient-to-r from-red-600 to-rose-500 bg-clip-text text-transparent leading-none">Naranthorn Command</h1>
-                <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-bold mt-1 md:mt-0.5 flex items-center gap-1.5 uppercase tracking-widest">
+                <h1 className="text-sm md:text-lg font-black bg-gradient-to-r from-red-600 to-rose-500 bg-clip-text text-transparent leading-none">Naranthorn Command</h1>
+                <p className="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400 font-bold mt-0.5 flex items-center gap-1.5 uppercase tracking-widest">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
                   ศูนย์สั่งการ รพ.ยะลา
                 </p>
@@ -367,19 +367,19 @@ export default function NarinthornCommand() {
             </div>
           </div>
           
-          <div className="pointer-events-auto flex items-center gap-2 md:gap-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-4 md:px-5 py-2.5 rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/50 w-full md:w-auto justify-between md:justify-end">
-            <div className="flex items-center gap-4">
+          <div className="pointer-events-auto flex items-center gap-2 md:gap-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-3 md:px-4 py-2 rounded-xl shadow-sm border border-white/40 dark:border-slate-700/50 w-full md:w-auto justify-between md:justify-end">
+            <div className="flex items-center gap-3">
               <div className="flex flex-col items-center">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">เคสวันนี้</span>
-                <span className="text-base font-black text-slate-800 dark:text-slate-200 leading-none">{stats.total}</span>
+                <span className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-wider">เคสวันนี้</span>
+                <span className="text-sm md:text-base font-black text-slate-800 dark:text-slate-200 leading-none">{stats.total}</span>
               </div>
-              <div className="w-px h-6 bg-slate-300/50 dark:bg-slate-700/50"></div>
+              <div className="w-px h-5 md:h-6 bg-slate-300/50 dark:bg-slate-700/50"></div>
               <div className="flex flex-col items-center">
-                <span className="text-[9px] font-black text-red-400 uppercase tracking-wider">กำลังดำเนินการ</span>
-                <span className="text-base font-black text-red-500 leading-none animate-pulse">{stats.active}</span>
+                <span className="text-[8px] md:text-[9px] font-black text-red-400 uppercase tracking-wider">กำลังดำเนินการ</span>
+                <span className="text-sm md:text-base font-black text-red-500 leading-none animate-pulse">{stats.active}</span>
               </div>
             </div>
-            <button onClick={() => navigate('/history')} className="ml-2 md:ml-4 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm">
+            <button onClick={() => navigate('/history')} className="ml-2 md:ml-3 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 text-slate-700 dark:text-slate-200 px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-bold transition-all active:scale-95 shadow-sm">
               ประวัติ
             </button>
           </div>
