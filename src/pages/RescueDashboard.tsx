@@ -165,6 +165,11 @@ export default function RescueDashboard() {
   
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
 
+  // Max Vehicles Modal State
+  const [maxVehicleModal, setMaxVehicleModal] = useState<{isOpen: boolean, unitName: string, maxVal: string}>({
+    isOpen: false, unitName: '', maxVal: ''
+  });
+
   // Confirm Modal State
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
@@ -253,12 +258,16 @@ export default function RescueDashboard() {
     setRescueUnits(prev => prev.map(u => u.id === myUnitId ? { ...u, available_vehicles: newAvailable } : u));
   }
 
-  async function handleUpdateMaxVehicles() {
+  function handleOpenMaxVehicleModal() {
     const unit = rescueUnits.find(u => u.id === myUnitId);
     if (!unit) return;
-    const newMaxStr = prompt(`ตั้งค่าจำนวนรถกู้ภัยสูงสุดสำหรับ ${unit.name}`, (unit.total_vehicles || 10).toString());
-    if (newMaxStr === null) return;
-    const newMax = parseInt(newMaxStr);
+    setMaxVehicleModal({ isOpen: true, unitName: unit.name, maxVal: (unit.total_vehicles || 10).toString() });
+  }
+
+  async function handleSaveMaxVehicles() {
+    const unit = rescueUnits.find(u => u.id === myUnitId);
+    if (!unit) return;
+    const newMax = parseInt(maxVehicleModal.maxVal);
     if (isNaN(newMax) || newMax < 0) {
       alert("กรุณากรอกตัวเลขที่ถูกต้อง");
       return;
@@ -268,6 +277,7 @@ export default function RescueDashboard() {
     const newAvailable = Math.min(currentAvailable, newMax);
     await supabase.from('rescue_units').update({ total_vehicles: newMax, available_vehicles: newAvailable }).eq('id', myUnitId);
     setRescueUnits(prev => prev.map(u => u.id === myUnitId ? { ...u, total_vehicles: newMax, available_vehicles: newAvailable } : u));
+    setMaxVehicleModal({ isOpen: false, unitName: '', maxVal: '' });
   }
 
   async function handleUpdateIncidentStatus(incidentId: string, newStatus: string) {
@@ -339,7 +349,7 @@ export default function RescueDashboard() {
                         <button onClick={()=>handleUpdateVehicles(-1)} className="w-5 h-5 flex items-center justify-center bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-cyan-600 hover:border-cyan-400 font-black">-</button>
                         <span className="text-sm font-black text-cyan-600 dark:text-cyan-400 w-8 text-center">{myUnit.available_vehicles || 0}/{myUnit.total_vehicles}</span>
                         <button onClick={()=>handleUpdateVehicles(1)} className="w-5 h-5 flex items-center justify-center bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-cyan-600 hover:border-cyan-400 font-black">+</button>
-                        <button onClick={handleUpdateMaxVehicles} className="w-5 h-5 ml-1 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" title="ตั้งค่าจำนวนรถสูงสุด"><Settings className="w-3.5 h-3.5"/></button>
+                        <button onClick={handleOpenMaxVehicleModal} className="w-5 h-5 ml-1 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" title="ตั้งค่าจำนวนรถสูงสุด"><Settings className="w-3.5 h-3.5"/></button>
                       </div>
                     )}
                     <div className="flex bg-slate-100 dark:bg-slate-900/50 rounded-xl p-1 shadow-inner ml-2 gap-1 border border-slate-200/50 dark:border-slate-700/50">
@@ -659,6 +669,52 @@ export default function RescueDashboard() {
           unitName={rescueUnits.find(u => u.id === selectedIncident.assigned_unit_id)?.name}
           onClose={() => setSelectedIncident(null)} 
         />
+      )}
+
+      {/* Max Vehicles Modal */}
+      {maxVehicleModal.isOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setMaxVehicleModal({...maxVehicleModal, isOpen: false})}></div>
+          <div className="relative bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl max-w-sm w-full border border-slate-200 dark:border-slate-700 transform transition-all duration-200 scale-100 flex flex-col items-center">
+            
+            <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-4 shadow-inner">
+              <Settings className="w-6 h-6 animate-[spin_3s_linear_infinite]" />
+            </div>
+            
+            <h3 className="text-xl font-black mb-1 text-slate-800 dark:text-white text-center">
+              ตั้งค่ารถกู้ภัยสูงสุด
+            </h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-bold mb-6 text-center">
+              {maxVehicleModal.unitName}
+            </p>
+            
+            <div className="w-full mb-6">
+              <label className="block text-xs font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest text-center">ระบุจำนวนรถกู้ภัยทั้งหมดที่มี</label>
+              <input 
+                type="number" 
+                min="0"
+                value={maxVehicleModal.maxVal} 
+                onChange={(e) => setMaxVehicleModal({...maxVehicleModal, maxVal: e.target.value})} 
+                className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-3xl font-black text-center text-indigo-600 dark:text-indigo-400 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+              />
+            </div>
+
+            <div className="flex gap-3 w-full">
+              <button 
+                onClick={() => setMaxVehicleModal({...maxVehicleModal, isOpen: false})}
+                className="flex-1 py-3.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600 transition-colors shadow-sm"
+              >
+                ยกเลิก
+              </button>
+              <button 
+                onClick={handleSaveMaxVehicles}
+                className="flex-1 py-3.5 rounded-xl font-bold text-white transition-all shadow-lg shadow-indigo-500/30 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700"
+              >
+                บันทึกการตั้งค่า
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <style>{`html.dark .map-tiles { filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7); }`}</style>
