@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, Tooltip, useMap, useMapEvents } from 'react-leaflet';
@@ -848,7 +848,7 @@ export default function NarinthornCommand() {
               // Draw line if selected and incident exists
               const isSelected = assignedUnitId === unit.id;
               return (
-                <div key={`${unit.id}-${unit.status}`}>
+                <React.Fragment key={`${unit.id}-${unit.status}`}>
                   <Marker position={[displayLat, displayLng]} icon={createAmbulanceIcon(unit.status)}>
                     <Popup>
                       <div className="font-bold mb-1">{unit.name}</div>
@@ -863,7 +863,7 @@ export default function NarinthornCommand() {
                       weight={3}
                     />
                   )}
-                </div>
+                </React.Fragment>
               )
             })}
           </MapContainer>
