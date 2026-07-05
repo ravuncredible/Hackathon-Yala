@@ -7,7 +7,6 @@ import {
   PhoneCall, MapPin, Users, HeartPulse, Send, AlertTriangle,
   Clock, ShieldAlert, ArrowLeft, Loader2, Target, Car, CheckCircle, Activity, Search, ChevronDown, X
 } from 'lucide-react';
-import ThemeToggle from '../components/ThemeToggle';
 import { TRIAGE_COLORS, type TriageColorKey } from '../data/triageColors';
 import { MOCK_HOSPITALS } from '../data/hospitals'; // Used for hospitals since it's already there
 
@@ -335,19 +334,16 @@ export default function NarinthornCommand() {
   return (
     <div className="h-screen flex flex-col bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden font-sans transition-colors">
       
-      {/* Floating Header Island */}
-      <div className="p-3 md:p-4 z-20 flex-shrink-0">
-        <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/40 dark:border-slate-700/50 p-2.5 px-4 md:px-6 flex justify-between items-center rounded-3xl shadow-xl shadow-indigo-500/5 transition-all">
-          <div className="flex items-center gap-3 md:gap-4">
-            <button onClick={() => navigate('/')} className="text-slate-500 hover:text-slate-900 bg-white dark:bg-slate-800 p-2 md:p-2.5 rounded-xl transition-all shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-0.5 active:scale-95">
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <div className="bg-gradient-to-br from-red-500 to-orange-500 p-2 md:p-2.5 rounded-xl shadow-lg shadow-red-500/30 text-white">
-              <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
+      {/* Header */}
+      <div className="bg-slate-900/5 dark:bg-slate-900/50 backdrop-blur-3xl border-b border-white/20 dark:border-slate-700/50 shadow-sm z-[1000] sticky top-0">
+        <header className="p-3 md:p-4 flex flex-col md:flex-row justify-between items-start md:items-center max-w-[1920px] mx-auto">
+          <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-0">
+            <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-rose-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/30">
+              <PhoneCall className="w-6 h-6 text-white" />
             </div>
-            <div className="flex flex-col justify-center">
-              <h1 className="text-lg md:text-xl font-black leading-none bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent drop-shadow-sm">Narinthorn Command</h1>
-              <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-bold mt-1 uppercase tracking-widest flex items-center gap-1.5">
+            <div>
+              <h1 className="text-xl md:text-2xl font-black bg-gradient-to-r from-red-600 to-rose-500 bg-clip-text text-transparent">Narinthorn Command</h1>
+              <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-bold mt-0.5 flex items-center gap-1.5 uppercase tracking-widest">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
                 ศูนย์สั่งการ รพ.ยะลา
               </p>
@@ -355,8 +351,7 @@ export default function NarinthornCommand() {
           </div>
           
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Stats Glass Pill */}
-            <div className="hidden md:flex items-center gap-4 bg-white/50 dark:bg-slate-800/50 px-5 py-1.5 rounded-2xl shadow-inner border border-slate-200/50 dark:border-slate-700/50">
+            <div className="hidden md:flex items-center gap-4 bg-white/50 dark:bg-slate-800/50 px-5 py-2 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
               <div className="flex flex-col items-center">
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">เคสวันนี้</span>
                 <span className="text-base font-black text-slate-800 dark:text-slate-200 leading-none">{stats.total}</span>
@@ -368,12 +363,9 @@ export default function NarinthornCommand() {
               </div>
             </div>
             
-            <button onClick={() => navigate('/history')} className="text-slate-600 dark:text-slate-300 hover:text-slate-900 bg-white dark:bg-slate-800 p-2.5 px-4 rounded-xl transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 text-sm font-bold shadow-sm border border-slate-200 dark:border-slate-700">
+            <button onClick={() => navigate('/history')} className="text-slate-600 dark:text-slate-300 hover:text-slate-900 bg-white dark:bg-slate-800 p-2.5 px-4 rounded-xl transition-all hover:shadow-md active:scale-95 flex items-center gap-2 text-sm font-bold shadow-sm border border-slate-200 dark:border-slate-700">
               ประวัติ
             </button>
-            <div className="bg-white dark:bg-slate-800 p-1 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-              <ThemeToggle />
-            </div>
           </div>
         </header>
       </div>
@@ -398,7 +390,6 @@ export default function NarinthornCommand() {
         >
           {/* Drag Handle */}
           <div 
- 
             className="absolute right-0 top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-indigo-400 dark:hover:bg-indigo-600 transition-colors z-20"
             onMouseDown={(e) => { e.preventDefault(); setIsDragging(true); }}
           />
@@ -416,12 +407,12 @@ export default function NarinthornCommand() {
               <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5"><PhoneCall className="w-4 h-4"/> ข้อมูลผู้แจ้ง</h3>
               <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-2 md:col-span-1">
-                  <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">ชื่อผู้แจ้ง</label>
-                  <input type="text" placeholder="ระบุชื่อ (ไม่ต้องระบุก็ได้)" value={callerName} onChange={e=>setCallerName(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-sm" />
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">ชื่อผู้แจ้ง</label>
+                  <input type="text" placeholder="ระบุชื่อ (ถ้ามี)" value={callerName} onChange={e=>setCallerName(e.target.value)} className="w-full bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 shadow-inner transition-all outline-none" />
                 </div>
                 <div className="col-span-2 md:col-span-1">
-                  <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">เบอร์โทรศัพท์ <span className="text-red-500">*</span></label>
-                  <input type="tel" placeholder="08X-XXX-XXXX" value={callerPhone} onChange={e=>setCallerPhone(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-sm" />
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">เบอร์โทรศัพท์ <span className="text-rose-500">*</span></label>
+                  <input type="tel" placeholder="08X-XXX-XXXX" value={callerPhone} onChange={e=>setCallerPhone(e.target.value)} className="w-full bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 shadow-inner transition-all outline-none font-medium" />
                 </div>
               </div>
               <label className="flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">

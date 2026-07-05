@@ -7,16 +7,11 @@ import IncidentCreate from './pages/IncidentCreate';
 import NotFound from './pages/NotFound';
 import NarinthornCommand from './pages/NarinthornCommand';
 import IncidentHistory from './pages/IncidentHistory';
-import ThemeToggle from './components/ThemeToggle';
 
 function Home() {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 text-slate-900 dark:text-slate-100 p-4 transition-colors">
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
-
       {/* Hero Section */}
       <div className="mb-10 text-center">
         <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-xl shadow-red-200 dark:shadow-red-900/30">

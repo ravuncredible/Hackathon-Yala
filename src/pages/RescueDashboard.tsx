@@ -9,7 +9,6 @@ import {
 } from 'lucide-react';
 import { MOCK_HOSPITALS, type Hospital } from '../data/hospitals';
 import { TRIAGE_COLORS, type TriageColorKey } from '../data/triageColors';
-import ThemeToggle from '../components/ThemeToggle';
 import IncidentDetailsModal from '../components/IncidentDetailsModal';
 
 // --- Types ---
@@ -305,9 +304,6 @@ export default function RescueDashboard() {
             }} className="text-slate-600 dark:text-slate-300 hover:text-slate-900 bg-white dark:bg-slate-800 p-2.5 px-4 rounded-xl transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 text-sm font-bold shadow-sm border border-slate-200 dark:border-slate-700 whitespace-nowrap">
               ประวัติรับเคส
             </button>
-            <div className="bg-white dark:bg-slate-800 p-1 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-              <ThemeToggle />
-            </div>
             
             {/* Desktop Unit Selector & Status Toggle */}
             <div className="hidden md:flex items-center gap-2 bg-white/50 dark:bg-slate-800/50 p-2 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-inner">
@@ -329,9 +325,9 @@ export default function RescueDashboard() {
                       </div>
                     )}
                     <div className="flex bg-slate-100 dark:bg-slate-900/50 rounded-xl p-1 shadow-inner ml-2 gap-1 border border-slate-200/50 dark:border-slate-700/50">
-                      <button onClick={()=>handleUpdateMyStatus('Available')} className={`px-3 py-1.5 text-sm font-bold rounded-lg transition-all duration-300 hover:-translate-y-0.5 active:scale-95 ${myUnit?.status==='Available'?'bg-gradient-to-r from-green-500 to-green-400 text-white shadow-lg shadow-green-500/30 ring-2 ring-green-200 dark:ring-green-900':'text-slate-500 hover:bg-white dark:hover:bg-slate-700'}`}>ว่าง</button>
-                      <button onClick={()=>handleUpdateMyStatus('En Route')} className={`px-3 py-1.5 text-sm font-bold rounded-lg transition-all duration-300 hover:-translate-y-0.5 active:scale-95 ${myUnit?.status==='En Route'?'bg-gradient-to-r from-amber-500 to-amber-400 text-white shadow-lg shadow-amber-500/30 ring-2 ring-amber-200 dark:ring-amber-900':'text-slate-500 hover:bg-white dark:hover:bg-slate-700'}`}>ออกเหตุ</button>
-                      <button onClick={()=>handleUpdateMyStatus('Busy')} className={`px-3 py-1.5 text-sm font-bold rounded-lg transition-all duration-300 hover:-translate-y-0.5 active:scale-95 ${myUnit?.status==='Busy'?'bg-gradient-to-r from-red-500 to-red-400 text-white shadow-lg shadow-red-500/30 ring-2 ring-red-200 dark:ring-red-900':'text-slate-500 hover:bg-white dark:hover:bg-slate-700'}`}>ติดพัน</button>
+                      <button onClick={()=>handleUpdateMyStatus('Available')} className={`px-4 py-2 text-sm font-black rounded-xl transition-all duration-300 hover:-translate-y-1 active:scale-95 ${myUnit?.status==='Available'?'bg-gradient-to-r from-green-500 to-green-400 text-white shadow-lg shadow-green-500/40 ring-2 ring-green-200 dark:ring-green-900':'text-slate-500 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm border border-slate-200 dark:border-slate-700'}`}>ว่าง</button>
+                      <button onClick={()=>handleUpdateMyStatus('En Route')} className={`px-4 py-2 text-sm font-black rounded-xl transition-all duration-300 hover:-translate-y-1 active:scale-95 ${myUnit?.status==='En Route'?'bg-gradient-to-r from-amber-500 to-amber-400 text-white shadow-lg shadow-amber-500/40 ring-2 ring-amber-200 dark:ring-amber-900':'text-slate-500 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm border border-slate-200 dark:border-slate-700'}`}>ออกเหตุ</button>
+                      <button onClick={()=>handleUpdateMyStatus('Busy')} className={`px-4 py-2 text-sm font-black rounded-xl transition-all duration-300 hover:-translate-y-1 active:scale-95 ${myUnit?.status==='Busy'?'bg-gradient-to-r from-red-500 to-rose-400 text-white shadow-lg shadow-red-500/40 ring-2 ring-red-200 dark:ring-red-900':'text-slate-500 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm border border-slate-200 dark:border-slate-700'}`}>ติดพัน</button>
                     </div>
                   </>
                 );
@@ -392,7 +388,7 @@ export default function RescueDashboard() {
                   const timeString = new Date(inc.created_at).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
                   
                   return (
-                    <div key={inc.id} className={`bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-5 rounded-3xl border-2 shadow-lg flex flex-col gap-3 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl active:scale-[0.98] ${colorConfig.border}`}>
+                    <div key={inc.id} className={`bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl p-5 rounded-3xl border-2 shadow-lg flex flex-col gap-3 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:${colorConfig.glow} active:scale-[0.98] ${colorConfig.border}`}>
                       
                       {/* Header */}
                       <div className="flex justify-between items-start">

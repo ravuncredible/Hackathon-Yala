@@ -11,16 +11,23 @@
 
 /* Custom minimal scrollbar */
 .styled-scrollbar::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
+  height: 4px;
+  width: 4px;
 }
 .styled-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 .styled-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
+  background-color: rgba(203, 213, 225, 0.5);
   border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+.styled-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.8);
 }
 html.dark .styled-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #475569;
+  background-color: rgba(71, 85, 105, 0.5);
+}
+html.dark .styled-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.8);
 }
