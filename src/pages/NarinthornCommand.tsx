@@ -373,12 +373,13 @@ export default function NarinthornCommand() {
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">เคสวันนี้</span>
                 <span className="text-base font-black text-slate-800 dark:text-slate-200 leading-none">{stats.total}</span>
               </div>
+              <div className="w-px h-6 bg-slate-300/50 dark:bg-slate-700/50"></div>
+              <div className="flex flex-col items-center">
                 <span className="text-[9px] font-black text-red-400 uppercase tracking-wider">กำลังดำเนินการ</span>
                 <span className="text-base font-black text-red-500 leading-none animate-pulse">{stats.active}</span>
               </div>
             </div>
-            
-            <button onClick={() => navigate('/history')} className="text-slate-600 dark:text-slate-300 hover:text-slate-900 bg-white dark:bg-slate-800 p-2.5 px-4 rounded-xl transition-all hover:shadow-md active:scale-95 flex items-center gap-2 text-sm font-bold shadow-sm border border-slate-200 dark:border-slate-700">
+            <button onClick={() => navigate('/history')} className="ml-2 md:ml-4 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm">
               ประวัติ
             </button>
           </div>
