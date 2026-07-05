@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import {
   ShieldAlert, ArrowLeft, Activity, Droplet, Clock, Truck,
-  MapPin, Loader2, PhoneCall, ChevronUp, ChevronDown, CheckCircle, XCircle, FileText
+  MapPin, Loader2, PhoneCall, ChevronUp, ChevronDown, CheckCircle, XCircle, FileText, Settings
 } from 'lucide-react';
 import { MOCK_HOSPITALS, type Hospital } from '../data/hospitals';
 import { TRIAGE_COLORS, type TriageColorKey } from '../data/triageColors';
@@ -253,6 +253,23 @@ export default function RescueDashboard() {
     setRescueUnits(prev => prev.map(u => u.id === myUnitId ? { ...u, available_vehicles: newAvailable } : u));
   }
 
+  async function handleUpdateMaxVehicles() {
+    const unit = rescueUnits.find(u => u.id === myUnitId);
+    if (!unit) return;
+    const newMaxStr = prompt(`ตั้งค่าจำนวนรถกู้ภัยสูงสุดสำหรับ ${unit.name}`, (unit.total_vehicles || 10).toString());
+    if (newMaxStr === null) return;
+    const newMax = parseInt(newMaxStr);
+    if (isNaN(newMax) || newMax < 0) {
+      alert("กรุณากรอกตัวเลขที่ถูกต้อง");
+      return;
+    }
+    const currentAvailable = unit.available_vehicles || 0;
+    // ensure available isn't greater than new max
+    const newAvailable = Math.min(currentAvailable, newMax);
+    await supabase.from('rescue_units').update({ total_vehicles: newMax, available_vehicles: newAvailable }).eq('id', myUnitId);
+    setRescueUnits(prev => prev.map(u => u.id === myUnitId ? { ...u, total_vehicles: newMax, available_vehicles: newAvailable } : u));
+  }
+
   async function handleUpdateIncidentStatus(incidentId: string, newStatus: string) {
     const { error } = await supabase.from('incidents').update({ status: newStatus }).eq('id', incidentId);
     if (error) {
@@ -322,6 +339,7 @@ export default function RescueDashboard() {
                         <button onClick={()=>handleUpdateVehicles(-1)} className="w-5 h-5 flex items-center justify-center bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-cyan-600 hover:border-cyan-400 font-black">-</button>
                         <span className="text-sm font-black text-cyan-600 dark:text-cyan-400 w-8 text-center">{myUnit.available_vehicles || 0}/{myUnit.total_vehicles}</span>
                         <button onClick={()=>handleUpdateVehicles(1)} className="w-5 h-5 flex items-center justify-center bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-cyan-600 hover:border-cyan-400 font-black">+</button>
+                        <button onClick={handleUpdateMaxVehicles} className="w-5 h-5 ml-1 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" title="ตั้งค่าจำนวนรถสูงสุด"><Settings className="w-3.5 h-3.5"/></button>
                       </div>
                     )}
                     <div className="flex bg-slate-100 dark:bg-slate-900/50 rounded-xl p-1 shadow-inner ml-2 gap-1 border border-slate-200/50 dark:border-slate-700/50">
@@ -446,12 +464,6 @@ export default function RescueDashboard() {
                           className="flex-1 py-3 bg-gradient-to-r from-green-500 to-green-400 text-white hover:from-green-600 hover:to-green-500 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-green-500/40 hover:-translate-y-1 active:scale-95"
                         >
                           <CheckCircle className="w-5 h-5" /> จบงาน
-                        </button>
-                        <button 
-                          onClick={() => openConfirm('ยกเลิกงาน', 'ต้องการยกเลิกเหตุการณ์นี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้', 'ยืนยันยกเลิก', 'danger', () => handleUpdateIncidentStatus(inc.id, 'cancelled'))}
-                          className="py-3 px-4 bg-white text-slate-500 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 ring-1 ring-inset ring-slate-200 dark:ring-slate-600 shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95"
-                        >
-                          <XCircle className="w-5 h-5"/>
                         </button>
                       </div>
                     </div>

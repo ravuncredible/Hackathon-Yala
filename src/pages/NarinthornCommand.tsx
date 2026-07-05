@@ -89,10 +89,8 @@ export default function NarinthornCommand() {
   const [isSearching, setIsSearching] = useState(false);
   const [incidentCoords, setIncidentCoords] = useState<{lat: number, lng: number} | null>(null);
   
-  const [patientAge, setPatientAge] = useState('');
-  const [patientGender, setPatientGender] = useState('ชาย');
-  const [patientCondition, setPatientCondition] = useState('');
-  const [symptoms, setSymptoms] = useState('');
+  type PatientData = { age: string, gender: string, condition: string, symptoms: string };
+  const [patients, setPatients] = useState<PatientData[]>([{ age: '', gender: 'ชาย', condition: '', symptoms: '' }]);
   
   const [triageLevel, setTriageLevel] = useState<TriageColorKey | 'White' | null>(null);
   const [notificationModal, setNotificationModal] = useState<{type: 'success'|'error', message: string, details?: string} | null>(null);
@@ -274,15 +272,18 @@ export default function NarinthornCommand() {
       }
     };
 
+    const combinedSymptoms = patients.map((p, i) => patients.length > 1 ? `(ผู้ป่วย ${i+1}) ${p.symptoms || 'ไม่ระบุ'}` : (p.symptoms || 'ไม่ระบุอาการ')).join(' | ');
+    const combinedCondition = patients.map((p, i) => patients.length > 1 ? `(ผู้ป่วย ${i+1} - ${p.gender} ${p.age? p.age+'ปี':''}) ${p.condition || '-'}` : (p.condition || null)).join(' | ');
+
     const payload = {
-      name: `[${finalIncidentType}] แจ้งเหตุ: ${symptoms || 'ไม่ระบุอาการ'}${isEmsType ? vsString : ''}`,
+      name: `[${finalIncidentType}] แจ้งเหตุ: ${combinedSymptoms}${isEmsType ? vsString : ''}`,
       type: mapIncidentType(finalIncidentType),
       location_text: locationText,
       lat: incidentCoords?.lat || null,
       lng: incidentCoords?.lng || null,
-      patient_age: patientAge ? parseInt(patientAge) : null,
-      patient_gender: patientGender,
-      patient_condition: patientCondition,
+      patient_age: patients[0].age ? parseInt(patients[0].age) : null,
+      patient_gender: patients[0].gender,
+      patient_condition: combinedCondition,
       caller_name: callerName,
       caller_phone: callerPhone,
       is_caller_with_patient: isCallerWithPatient,
@@ -320,8 +321,7 @@ export default function NarinthornCommand() {
         message: 'ข้อมูลถูกส่งไปยังหน่วยกู้ภัยเรียบร้อยแล้ว'
       });
       // Reset form
-      setCallerName(''); setCallerPhone(''); setLocationText(''); setIncidentCoords(null);
-      setPatientAge(''); setPatientCondition(''); setSymptoms(''); setTriageLevel(null); setAssignedUnitId('');
+      setCallerName(''); setCallerPhone(''); setLocationText(''); setPatients([{ age: '', gender: 'ชาย', condition: '', symptoms: '' }]); setTriageLevel(null); setAssignedUnitId('');
       fetchData(); // refresh stats
     }
     setSubmitting(false);
@@ -474,38 +474,67 @@ export default function NarinthornCommand() {
 
             {/* Patient Info */}
             <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700">
-              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5"><Users className="w-4 h-4"/> ข้อมูลผู้ป่วย</h3>
-              <div className="grid grid-cols-4 gap-4">
-                <div className="col-span-1">
-                  <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">อายุ</label>
-                  <input type="number" value={patientAge} onChange={e=>setPatientAge(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-base focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all hover:border-slate-300 dark:hover:border-slate-600" placeholder="ปี" />
-                </div>
-                <div className="col-span-1">
-                  <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">เพศ</label>
-                  <select value={patientGender} onChange={e=>setPatientGender(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-base focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all hover:border-slate-300 dark:hover:border-slate-600">
-                    <option>ชาย</option><option>หญิง</option><option>ไม่ระบุ</option>
-                  </select>
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">โรคประจำตัว</label>
-                  <input type="text" value={patientCondition} onChange={e=>setPatientCondition(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-base focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all hover:border-slate-300 dark:hover:border-slate-600" placeholder="เช่น เบาหวาน, ความดัน" />
-                </div>
-                <div className="col-span-4">
-                  <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">อาการแรกรับ / การบาดเจ็บ</label>
-                  <input type="text" value={symptoms} onChange={e=>setSymptoms(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-base focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all hover:border-slate-300 dark:hover:border-slate-600" placeholder="เช่น หายใจไม่ออก, เลือดออกมาก" />
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {['อุบัติเหตุจราจร', 'พลัดตกหกล้ม', 'หายใจหอบเหนื่อย', 'หมดสติ', 'เจ็บหน้าอก', 'ชัก', 'หญิงคลอด'].map(tag => (
+              <div className="flex justify-between items-center">
+                <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5"><Users className="w-4 h-4"/> ข้อมูลผู้ป่วย</h3>
+                <button 
+                  onClick={(e) => { e.preventDefault(); setPatients([...patients, { age: '', gender: 'ชาย', condition: '', symptoms: '' }]); }}
+                  className="text-xs bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-400 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition-colors"
+                >
+                  + เพิ่มผู้ป่วย
+                </button>
+              </div>
+              
+              {patients.map((patient, index) => (
+                <div key={index} className="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm relative">
+                  {patients.length > 1 && (
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-xs font-black bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 px-2 py-1 rounded">ผู้ป่วยคนที่ {index + 1}</span>
                       <button 
-                        key={tag} 
-                        onClick={(e) => { e.preventDefault(); setSymptoms(prev => prev ? `${prev}, ${tag}` : tag); }} 
-                        className="text-xs bg-slate-100 hover:bg-indigo-100 text-slate-600 hover:text-indigo-700 dark:bg-slate-800 dark:hover:bg-indigo-900/50 dark:text-slate-400 dark:hover:text-indigo-300 px-2.5 py-1.5 rounded-md transition-colors font-semibold shadow-sm border border-slate-200/50 dark:border-slate-700/50"
+                        onClick={(e) => { e.preventDefault(); setPatients(patients.filter((_, i) => i !== index)); }}
+                        className="text-xs text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 px-2 py-1 rounded transition-colors font-bold"
                       >
-                        + {tag}
+                        ลบผู้ป่วย
                       </button>
-                    ))}
+                    </div>
+                  )}
+                  <div className="grid grid-cols-4 gap-4">
+                    <div className="col-span-1">
+                      <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">อายุ</label>
+                      <input type="number" value={patient.age} onChange={e=>{const newP=[...patients]; newP[index].age=e.target.value; setPatients(newP);}} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-base focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all hover:border-slate-300 dark:hover:border-slate-600" placeholder="ปี" />
+                    </div>
+                    <div className="col-span-1">
+                      <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">เพศ</label>
+                      <select value={patient.gender} onChange={e=>{const newP=[...patients]; newP[index].gender=e.target.value; setPatients(newP);}} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-base focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all hover:border-slate-300 dark:hover:border-slate-600">
+                        <option>ชาย</option><option>หญิง</option><option>ไม่ระบุ</option>
+                      </select>
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">โรคประจำตัว</label>
+                      <input type="text" value={patient.condition} onChange={e=>{const newP=[...patients]; newP[index].condition=e.target.value; setPatients(newP);}} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-base focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all hover:border-slate-300 dark:hover:border-slate-600" placeholder="เช่น เบาหวาน, ความดัน" />
+                    </div>
+                    <div className="col-span-4">
+                      <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">อาการแรกรับ / การบาดเจ็บ</label>
+                      <input type="text" value={patient.symptoms} onChange={e=>{const newP=[...patients]; newP[index].symptoms=e.target.value; setPatients(newP);}} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-base focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all hover:border-slate-300 dark:hover:border-slate-600" placeholder="เช่น หายใจไม่ออก, เลือดออกมาก" />
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {['อุบัติเหตุจราจร', 'พลัดตกหกล้ม', 'หายใจหอบเหนื่อย', 'หมดสติ', 'เจ็บหน้าอก', 'ชัก', 'หญิงคลอด'].map(tag => (
+                          <button 
+                            key={tag} 
+                            onClick={(e) => { 
+                              e.preventDefault(); 
+                              const newP=[...patients]; 
+                              newP[index].symptoms = newP[index].symptoms ? `${newP[index].symptoms}, ${tag}` : tag; 
+                              setPatients(newP); 
+                            }} 
+                            className="text-xs bg-slate-100 hover:bg-indigo-100 text-slate-600 hover:text-indigo-700 dark:bg-slate-800 dark:hover:bg-indigo-900/50 dark:text-slate-400 dark:hover:text-indigo-300 px-2.5 py-1.5 rounded-md transition-colors font-semibold shadow-sm border border-slate-200/50 dark:border-slate-700/50"
+                          >
+                            + {tag}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </section>
 
             {/* Vital Signs */}
