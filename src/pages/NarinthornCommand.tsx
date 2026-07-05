@@ -48,6 +48,16 @@ const createHospitalIcon = () => {
   });
 };
 
+const createIncidentIcon = () => {
+  return L.divIcon({
+    className: 'custom-div-icon',
+    html: `<div style="width:32px;height:32px;border-radius:50%;background:#ef4444;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;animation:pulse 2s infinite;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+  });
+};
+
 export default function NarinthornCommand() {
   const navigate = useNavigate();
 
@@ -58,8 +68,9 @@ export default function NarinthornCommand() {
   const [loading, setLoading] = useState(true);
 
   // Resizable Sidebar State
-  const [sidebarWidth, setSidebarWidth] = useState(480);
+  const [sidebarWidth, setSidebarWidth] = useState(580);
   const [isDragging, setIsDragging] = useState(false);
+  const [isPickingLocation, setIsPickingLocation] = useState(false);
 
   // Disaster Mode State
   const [isDisasterMode, setIsDisasterMode] = useState(false);
@@ -183,11 +194,7 @@ export default function NarinthornCommand() {
   }, [locationText, showSuggestions]);
 
   const handleSetLocationToCenter = () => {
-    if (mapRef) {
-      const center = mapRef.getCenter();
-      setIncidentCoords({ lat: center.lat, lng: center.lng });
-      setLocationText(`พิกัด: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`);
-    }
+    setIsPickingLocation(!isPickingLocation);
   };
 
   const handleSearchLocation = async () => {
@@ -312,7 +319,15 @@ export default function NarinthornCommand() {
   }
 
   function MapController() {
-    const map = useMap();
+    const map = useMapEvents({
+      click(e) {
+        if (isPickingLocation) {
+          setIncidentCoords({ lat: e.latlng.lat, lng: e.latlng.lng });
+          setLocationText(`พิกัด: ${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`);
+          setIsPickingLocation(false);
+        }
+      }
+    });
     useEffect(() => { setMapRef(map); }, [map]);
     return null;
   }
@@ -616,8 +631,8 @@ export default function NarinthornCommand() {
                 <button onClick={(e)=>{e.preventDefault(); handleSearchLocation(); setShowSuggestions(false);}} disabled={isSearching} className="bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 px-3 rounded-lg font-bold text-xs flex items-center gap-1 transition-colors">
                   {isSearching ? <Loader2 className="w-4 h-4 animate-spin"/> : <Search className="w-4 h-4" />} ค้นหา
                 </button>
-                <button onClick={(e)=>{e.preventDefault(); handleSetLocationToCenter();}} className="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 px-3 rounded-lg font-bold text-xs flex items-center gap-1 transition-colors whitespace-nowrap shadow-sm border border-indigo-200 dark:border-indigo-800">
-                  <Target className="w-4 h-4" /> 📍 กำหนดจุดเกิดเหตุ
+                <button onClick={(e)=>{e.preventDefault(); handleSetLocationToCenter();}} className={`px-3 rounded-lg font-bold text-xs flex items-center gap-1 transition-colors whitespace-nowrap shadow-sm border ${isPickingLocation ? 'bg-indigo-600 text-white border-indigo-700 animate-pulse' : 'bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800'}`}>
+                  <Target className="w-4 h-4" /> {isPickingLocation ? 'คลิกบนแผนที่...' : '📍 กำหนดจุดเกิดเหตุ'}
                 </button>
                 {incidentCoords && (
                   <button onClick={(e)=>{e.preventDefault(); setIncidentCoords(null);}} className="bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/50 dark:text-red-300 px-3 rounded-lg font-bold text-xs flex items-center gap-1 transition-colors whitespace-nowrap shadow-sm border border-red-200 dark:border-red-800">
@@ -807,13 +822,13 @@ export default function NarinthornCommand() {
             </div>
           </div>
 
-          <MapContainer center={[6.54, 101.28]} zoom={12} className="w-full h-full" zoomControl={true}>
+          <MapContainer center={[6.54, 101.28]} zoom={12} className={`w-full h-full ${isPickingLocation ? 'cursor-crosshair' : ''}`} zoomControl={true}>
             <MapController />
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" className="map-tiles" />
             
             {/* Incident Marker (if picked) */}
             {incidentCoords && (
-              <Marker position={[incidentCoords.lat, incidentCoords.lng]}>
+              <Marker position={[incidentCoords.lat, incidentCoords.lng]} icon={createIncidentIcon()}>
                 <Popup>
                   <div className="font-bold text-red-600">📍 จุดเกิดเหตุ</div>
                 </Popup>
