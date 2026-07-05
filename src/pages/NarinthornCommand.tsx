@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, Tooltip, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
@@ -292,7 +292,7 @@ export default function NarinthornCommand() {
       estimated_casualties: estimatedCasualties ? parseInt(estimatedCasualties) : null,
       triage_checklist: checklistStr,
       status: 'active',
-      created_by: 'Narinthorn Dispatcher'
+      created_by: 'Naranthorn Dispatcher'
     };
 
     const { error } = await supabase.from('incidents').insert(payload);
@@ -345,29 +345,34 @@ export default function NarinthornCommand() {
     <div className="h-screen flex flex-col bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden font-sans transition-colors">
       
       {/* Header */}
-      <div className="bg-slate-900/5 dark:bg-slate-900/50 backdrop-blur-3xl border-b border-white/20 dark:border-slate-700/50 shadow-sm z-[1000] sticky top-0">
-        <header className="p-3 md:p-4 flex flex-col md:flex-row justify-between items-start md:items-center max-w-[1920px] mx-auto">
-          <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-0">
-            <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-rose-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/30">
-              <PhoneCall className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl md:text-2xl font-black bg-gradient-to-r from-red-600 to-rose-500 bg-clip-text text-transparent">Narinthorn Command</h1>
-              <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-bold mt-0.5 flex items-center gap-1.5 uppercase tracking-widest">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                ศูนย์สั่งการ รพ.ยะลา
-              </p>
+      <div className="z-[1000] p-2 md:p-4 pointer-events-none">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center max-w-[1920px] mx-auto gap-3">
+          
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <Link to="/" className="pointer-events-auto flex items-center text-slate-600 dark:text-slate-300 font-bold hover:text-rose-600 dark:hover:text-rose-400 bg-white/80 hover:bg-white/95 dark:bg-slate-900/80 dark:hover:bg-slate-800/95 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/50 hover:shadow-xl transition-all">
+              <ArrowLeft className="w-5 h-5 md:mr-2" /> <span className="hidden md:inline">กลับ</span>
+            </Link>
+            
+            <div className="pointer-events-auto flex items-center gap-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-4 md:px-5 py-2.5 rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/50 flex-1 md:flex-initial">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-red-500 via-rose-500 to-orange-500 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/30 flex-shrink-0">
+                <PhoneCall className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-base md:text-2xl font-black bg-gradient-to-r from-red-600 to-rose-500 bg-clip-text text-transparent leading-none">Naranthorn Command</h1>
+                <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-bold mt-1 md:mt-0.5 flex items-center gap-1.5 uppercase tracking-widest">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                  ศูนย์สั่งการ รพ.ยะลา
+                </p>
+              </div>
             </div>
           </div>
           
-          <div className="flex items-center gap-2 md:gap-4">
-            <div className="hidden md:flex items-center gap-4 bg-white/50 dark:bg-slate-800/50 px-5 py-2 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
+          <div className="pointer-events-auto flex items-center gap-2 md:gap-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-4 md:px-5 py-2.5 rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/50 w-full md:w-auto justify-between md:justify-end">
+            <div className="flex items-center gap-4">
               <div className="flex flex-col items-center">
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">เคสวันนี้</span>
                 <span className="text-base font-black text-slate-800 dark:text-slate-200 leading-none">{stats.total}</span>
               </div>
-              <div className="w-px h-6 bg-slate-200 dark:bg-slate-700"></div>
-              <div className="flex flex-col items-center">
                 <span className="text-[9px] font-black text-red-400 uppercase tracking-wider">กำลังดำเนินการ</span>
                 <span className="text-base font-black text-red-500 leading-none animate-pulse">{stats.active}</span>
               </div>

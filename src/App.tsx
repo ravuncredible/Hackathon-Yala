@@ -50,7 +50,7 @@ function Home() {
             Integrated Dispatch System
           </h2>
           <p className="text-slate-400 font-medium text-sm md:text-base max-w-lg mx-auto leading-relaxed">
-            ระบบเชื่อมโยงศูนย์สั่งการนรินทรกับเครือข่ายกู้ภัยแบบบูรณาการ
+            ระบบเชื่อมโยงศูนย์สั่งการนเรนทรกับเครือข่ายกู้ภัยแบบบูรณาการ
             <br className="hidden md:block" />
             ลดเวลาประสานงาน ทะลวงขีดจำกัดด้วยข้อมูล Real-time
           </p>
@@ -70,7 +70,7 @@ function Home() {
             <div className="w-20 h-20 bg-gradient-to-br from-slate-800 to-slate-900 border border-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-rose-500/30 transition-all duration-500 relative z-10 shadow-inner">
               <PhoneCall className="w-10 h-10 text-rose-400 group-hover:text-rose-300 transition-colors" />
             </div>
-            <h3 className="text-2xl font-black text-white mb-3 relative z-10 tracking-wide">ศูนย์สั่งการนรินทร</h3>
+            <h3 className="text-2xl font-black text-white mb-3 relative z-10 tracking-wide">ศูนย์สั่งการนเรนทร</h3>
             <p className="text-slate-400 text-sm font-medium relative z-10 leading-relaxed max-w-[250px]">
               รับแจ้งเหตุจากประชาชน ประเมินสถานการณ์ (Triage) และสั่งการหน่วยกู้ภัยด้วยความแม่นยำสูง
             </p>
