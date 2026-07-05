@@ -121,7 +121,7 @@ export default function IncidentDetailsModal({ incident, unitName, onClose }: In
                   <span className="text-sm text-slate-500 font-medium">อายุ:</span>
                   <span className="text-sm font-bold text-slate-800 dark:text-slate-200">{incident.patient_age ? `${incident.patient_age} ปี` : '-'}</span>
                 </div>
-                {incident.estimated_casualties > 1 && (
+                {(incident.estimated_casualties ?? 0) > 1 && (
                   <div className="flex justify-between items-center bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">
                     <span className="text-sm text-red-600 dark:text-red-400 font-bold">จำนวนผู้บาดเจ็บ (ประเมิน):</span>
                     <span className="text-sm font-black text-red-600 dark:text-red-400">{incident.estimated_casualties} ราย</span>
